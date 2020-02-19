@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace Session1.Api
@@ -17,7 +19,7 @@ namespace Session1.Api
 
         public Startup(IConfiguration config)
         {
-            //lets use a constructor that will have IConfiguraion injected for us
+            //3. lets use a constructor that will have IConfiguraion injected for us
             this.config = config;
         }
 
@@ -26,8 +28,13 @@ namespace Session1.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //4. inject config as IOptions<> for additional isolation
+            services.AddOptions();
 
-            //lets load configuration into a model we can inject into our services
+            //5 lets use controllers
+            services.AddControllers();
+
+            //4. lets load configuration into a model we can inject into our services/controllers
             var appSettings = config.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(appSettings);
         }
@@ -40,10 +47,20 @@ namespace Session1.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            //6 lets also have static files, this is added before routing middleware
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "MyStaticFiles")),
+                RequestPath = "/StaticFiles"
+            });
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
+                //5 lets use controllers
+                endpoints.MapControllers(); //6. Map attribute-routed API controllers
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");

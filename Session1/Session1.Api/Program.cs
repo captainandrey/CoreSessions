@@ -17,13 +17,14 @@ namespace Session1.Api
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            //1. this adds a lot of default config eg adding appsettings.json, appsettings.{Environment}.json as config files, console logging 
+
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    //this adds a lot of default config eg adding appsettings.json, appsettings.{Environment}.json as config files, console logging 
                     webBuilder.UseStartup<Startup>()
                     
-                    //but we can make changes
+                    //2. but we can make changes
                     .ConfigureAppConfiguration((hostingContext, config) =>
                     {
                         config.AddJsonFile("myownjsonfile.json", optional: true, reloadOnChange: true);
