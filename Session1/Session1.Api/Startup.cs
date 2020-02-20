@@ -39,10 +39,12 @@ namespace Session1.Api
             var appSettings = config.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(appSettings);
 
+            //2.1 add our own service
             services.AddScoped<IMyService, MyService>();
             //services.AddSingleton<IMyService, MyService>();
             //services.AddTransient<IMyService, MyService>();
 
+            //2.2 add a hosted service
             services.AddHostedService<MyHostedService>();
         }
 
