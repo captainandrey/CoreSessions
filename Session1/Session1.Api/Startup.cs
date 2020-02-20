@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Session1.Api.Services;
 
 namespace Session1.Api
 {
@@ -37,6 +38,12 @@ namespace Session1.Api
             //4. lets load configuration into a model we can inject into our services/controllers
             var appSettings = config.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(appSettings);
+
+            services.AddScoped<IMyService, MyService>();
+            //services.AddSingleton<IMyService, MyService>();
+            //services.AddTransient<IMyService, MyService>();
+
+            services.AddHostedService<MyHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
