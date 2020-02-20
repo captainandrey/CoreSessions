@@ -46,6 +46,9 @@ namespace Session1.Api
 
             //2.2 add a hosted service
             services.AddHostedService<MyHostedService>();
+
+            //2.3 Add a service that uses http client
+            services.AddTransient<IMyServiceWithHttpClient, MyServiceWithHttpClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

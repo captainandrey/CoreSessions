@@ -20,11 +20,11 @@ namespace Session1.Api.Services
             this.logger = logger;
         }
 
-        public string GetMyKey()
+        public Task<string> GetMyKey()
         {
             string result = $"{this.GetHashCode()}:{appSettings.SomeKey}";
             logger.LogInformation(result);
-            return result;
+            return Task.FromResult(result);
         }
     }
 }

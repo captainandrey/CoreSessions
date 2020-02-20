@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Session1.Api.Services
 {
-    public interface IMyService
+    public interface IMyServiceWithHttpClient
     {
-        Task<string> GetMyKey();
+        Task<string> CallSomeApi1();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Session1.Api.Model;
 using Session1.Api.Services;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,14 @@ namespace Session1.Api.Controllers
         public ActionResult Get()
         {
             return Ok($"{serivce.GetMyKey()}\n{serivce2.GetMyKey()}");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TestResponse>> Post(TestRequest requestModel)
+        {
+            var result = new TestResponse() { SomeValue = await serivce.GetMyKey() };
+
+            return Ok(result);
         }
     }
 }
