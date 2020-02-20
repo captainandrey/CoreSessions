@@ -12,7 +12,7 @@ namespace Session1.Api.Controllers
     public class TestController : ControllerBase //inherit base controller
     {
         private AppSettings appSettings;
-        //we configured injection of 
+        //we configured injection of IOptions
         public TestController(IOptions<AppSettings> config)
         {
             this.appSettings = config.Value;
