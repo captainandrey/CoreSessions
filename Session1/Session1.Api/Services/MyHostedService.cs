@@ -70,7 +70,14 @@ namespace Session1.Api.Services
                     await scopedService2.GetMyKey();
 
 
-                   logger.LogInformation(await myServiceWithHttpClient.CallSomeApi1());
+                    //2.4
+                    logger.LogInformation(await myServiceWithHttpClient.CallSomeApi1());
+
+                    //2.5
+                    logger.LogInformation(await myServiceWithHttpClient.CallSomeApi2());
+
+                    //2.7
+                    logger.LogInformation(await myServiceWithHttpClient.CallSomeApi3());
 
                 }
 

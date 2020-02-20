@@ -29,6 +29,17 @@ namespace Session1.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //2.5
+            services.AddHttpClient("myclient",
+                //2.6 we can name the client and add default config to it
+                c =>
+                {
+                    c.BaseAddress = new Uri("https://localhost:5001/");
+                    c.DefaultRequestHeaders.Add("Accept", "application/json");
+                });
+
+            services.AddHttpClient<MyTypedClient>();
+
             //4. inject config as IOptions<> for additional isolation
             services.AddOptions();
 
