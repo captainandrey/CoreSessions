@@ -21,7 +21,7 @@ namespace Session1.Api.Services
             this.typedClient = typedClient;
         }
 
-        //2.4 This works but has problems. Creating and disposting http client every time will lead to socket exhaustion
+        //2.4 This works but has problems. Creating and disposing http client every time will lead to socket exhaustion
         public async Task<string> CallSomeApi1()
         {
             using (HttpClient client = new HttpClient())
