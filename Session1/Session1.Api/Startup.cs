@@ -20,7 +20,7 @@ namespace Session1.Api
 
         public Startup(IConfiguration config)
         {
-            //3. lets use a constructor that will have IConfiguraion injected for us
+            //4. lets use a constructor that will have IConfiguraion injected for us
             this.config = config;
         }
 
@@ -43,7 +43,7 @@ namespace Session1.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
         {
-            //6 custom middleware example
+            //3 custom middleware example
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
 
 
