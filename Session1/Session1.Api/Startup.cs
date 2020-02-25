@@ -44,8 +44,16 @@ namespace Session1.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
         {
             //6 custom middleware example
-            // docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
 
+
+            //this short circuits the pipeline
+            //app.Run(async context =>
+            //{
+            //    await context.Response.WriteAsync("Hello, World!");
+            //});
+
+            //this allows the next middeware to run
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.

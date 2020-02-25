@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+//before we start https://docs.microsoft.com/en-us/dotnet/standard/net-standard
+
 namespace Session1.Api
 {
     public class Program
