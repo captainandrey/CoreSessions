@@ -57,7 +57,7 @@ namespace Session1.Api
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.
-                logger.LogInformation("Our custom middleware is being used! - Start");
+                logger.LogInformation($"Our custom middleware is being used! - Start {context.Request.Path}");
 
                 //if we remove this line, we will short circuit the pipeline, no further middleware will be called!
                 //await next.Invoke();
