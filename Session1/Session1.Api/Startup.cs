@@ -43,7 +43,7 @@ namespace Session1.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
         {
-            //custom middleware example
+            //6 custom middleware example
             // docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
 
             app.Use(async (context, next) =>
@@ -52,7 +52,8 @@ namespace Session1.Api
                 logger.LogInformation("Our custom middleware is being used! - Start");
 
                 //if we remove this line, we will short circuit the pipeline, no further middleware will be called!
-                await next.Invoke();
+                //await next.Invoke();
+                await next();
                 // Do logging or other work that doesn't write to the Response.
 
                 logger.LogInformation("Our custom middleware is being used! - End");
@@ -64,14 +65,14 @@ namespace Session1.Api
                 logger.LogInformation("Our custom middleware2 is being used! - Start");
 
                 //if we remove this line, we will short circuit the pipeline, no further middleware will be called!
-                await next.Invoke();
+               // await next.Invoke();
+                await next();
                 // Do logging or other work that doesn't write to the Response.
 
                 logger.LogInformation("Our custom middleware2 is being used! - End");
             });
 
-
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
