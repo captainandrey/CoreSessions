@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Session1.Api
 {
@@ -40,14 +41,29 @@ namespace Session1.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
         {
+            //custom middleware example
+            // docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
+
+            app.Use(async (context, next) =>
+            {
+                // Do work that doesn't write to the Response.
+                logger.LogInformation("Our custom middleware is being used!");
+
+                //if we remove this line, we will short circuit the pipeline, no further middleware will be called!
+                await next.Invoke();
+                // Do logging or other work that doesn't write to the Response.
+            });
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             //6 lets also have static files, this is added before routing middleware
+            //if request is handled by static file middleware, it is short circuited
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
