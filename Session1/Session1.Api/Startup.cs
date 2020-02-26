@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -30,15 +31,15 @@ namespace Session1.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //2.5
-            services.AddHttpClient("myclient",
-                //2.6 we can name the client and add default config to it
-                c =>
-                {
-                    c.BaseAddress = new Uri("https://localhost:5001/");
-                    c.DefaultRequestHeaders.Add("Accept", "application/json");
-                });
+            //services.AddHttpClient("myclient",
+            //    //2.6 we can name the client and add default config to it
+            //    c =>
+            //    {
+            //        c.BaseAddress = new Uri("https://localhost:5001/");
+            //        c.DefaultRequestHeaders.Add("Accept", "application/json");
+            //    });
 
-            services.AddHttpClient<MyTypedClient>();
+            //services.AddHttpClient<MyTypedClient>();
 
             //4. inject config as IOptions<> for additional isolation
             services.AddOptions();
@@ -50,16 +51,18 @@ namespace Session1.Api
             var appSettings = config.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(appSettings);
 
+            services.AddDbContext<AnimalsDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "InMemoryDb"), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
+
             //2.1 add our own service
             services.AddScoped<IMyService, MyService>();
             //services.AddSingleton<IMyService, MyService>();
             //services.AddTransient<IMyService, MyService>();
 
             //2.2 add a hosted service
-            services.AddHostedService<MyHostedService>();
+            //services.AddHostedService<MyHostedService>();
 
             //2.3 Add a service that uses http client
-            services.AddTransient<IMyServiceWithHttpClient, MyServiceWithHttpClient>();
+            //services.AddTransient<IMyServiceWithHttpClient, MyServiceWithHttpClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
