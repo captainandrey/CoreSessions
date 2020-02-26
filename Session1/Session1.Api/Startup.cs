@@ -72,7 +72,6 @@ namespace Session1.Api
                 // Do work that doesn't write to the Response.
                 logger.LogInformation("Our custom middleware2 is being used! - Start");
 
-                //if we remove this line, we will short circuit the pipeline, no further middleware will be called!
                // await next.Invoke();
                 await next();
                 // Do logging or other work that doesn't write to the Response.
