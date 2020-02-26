@@ -16,7 +16,7 @@ namespace Session1.Api
 {
     public class Startup
     {
-        private IConfiguration config;
+        private readonly IConfiguration config;
 
         public Startup(IConfiguration config)
         {

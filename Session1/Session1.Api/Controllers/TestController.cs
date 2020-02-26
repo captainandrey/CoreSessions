@@ -11,7 +11,7 @@ namespace Session1.Api.Controllers
     [Route("[controller]")] //6. routing attribute
     public class TestController : ControllerBase //inherit base controller
     {
-        private AppSettings appSettings;
+        private readonly AppSettings appSettings;
         //we configured injection of IOptions
         public TestController(IOptions<AppSettings> config)
         {
