@@ -28,7 +28,6 @@ namespace Session1.Api.Tests
                     webHost.UseStartup<Startup>()
                     .ConfigureTestServices(services =>
                     {
-
                         var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AnimalsDbContext>));
 
                         if (descriptor != null)
@@ -55,6 +54,18 @@ namespace Session1.Api.Tests
             var stringResponse = await response.Content.ReadAsStringAsync();
             Assert.IsTrue(response.IsSuccessStatusCode);
 
+        }
+
+        [TestMethod]
+        [DataRow(100)]
+        [DataRow(0)]
+        [DataRow(-100)]
+        public async Task TestGetOne(int id)
+        {
+            var client = host.GetTestClient();
+            var response = await client.GetAsync($"animal/{id}");
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
         }
 
         [TestMethod]
