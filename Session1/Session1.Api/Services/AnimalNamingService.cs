@@ -21,7 +21,7 @@ namespace Session1.Api.Services
         public Task<Animal> GenerateName(Animal animal)
         {
             var random = new Random();
-            var index = random.Next(0, names.Count - 1);
+            var index = random.Next(0, names.Count);
             animal.GivenName =$"{names[index]} the {animal.Name}";
 
             return Task.FromResult(animal);

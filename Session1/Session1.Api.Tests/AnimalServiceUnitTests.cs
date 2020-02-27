@@ -69,7 +69,7 @@ namespace Session1.Api.Tests
         private async Task PopulateTestData()
         {
            
-            context.Animal.Add(new Dal.Dto.Animal { Id = 1, IsReal = true, Name = "Aadvark" });
+            context.Animal.Add(new Dal.Dto.Animal { Id = 1, IsReal = true, Name = "Aardvark" });
             context.Animal.Add(new Dal.Dto.Animal { Id = 2, IsReal = false, Name = "Unicorn" });
             context.Animal.Add(new Dal.Dto.Animal { Id = 3, IsReal = true, Name = "Narwhal" });
             context.Animal.Add(new Dal.Dto.Animal { Id = 4, IsReal = true, Name = "Kiwi" });

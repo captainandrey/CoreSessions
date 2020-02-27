@@ -117,12 +117,14 @@ namespace Session1.Api.Services
                 var dto = mapper.Map<Dal.Dto.Animal>(animal);
 
                 context.Animal.Add(dto);
-
+                
                 await context.SaveChangesAsync();
 
                 var model = mapper.Map<Model.Animal>(dto);
 
-                return model;
+                var result = await animalNamingService.GenerateName(model);
+
+                return result;
             }
             catch (Exception ex)
             {
