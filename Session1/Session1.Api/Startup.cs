@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Session1.Api.Dal;
 using Session1.Api.Services;
 
 namespace Session1.Api
@@ -29,40 +31,17 @@ namespace Session1.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {
-            //2.5
-            //services.AddHttpClient("myclient",
-            //    //2.6 we can name the client and add default config to it
-            //    c =>
-            //    {
-            //        c.BaseAddress = new Uri("https://localhost:5001/");
-            //        c.DefaultRequestHeaders.Add("Accept", "application/json");
-            //    });
-
-            //services.AddHttpClient<MyTypedClient>();
-
-            //4. inject config as IOptions<> for additional isolation
+        {        
             services.AddOptions();
-
-            //5 lets use controllers
             services.AddControllers();
 
-            //4. lets load configuration into a model we can inject into our services/controllers
+            services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<IAnimalService, AnimalService>();
+            services.AddTransient<IMyDependantService, MyDependantService>();
+
             var appSettings = config.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(appSettings);
-
             services.AddDbContext<AnimalsDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "InMemoryDb"), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
-
-            //2.1 add our own service
-            services.AddScoped<IMyService, MyService>();
-            //services.AddSingleton<IMyService, MyService>();
-            //services.AddTransient<IMyService, MyService>();
-
-            //2.2 add a hosted service
-            //services.AddHostedService<MyHostedService>();
-
-            //2.3 Add a service that uses http client
-            //services.AddTransient<IMyServiceWithHttpClient, MyServiceWithHttpClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,13 +51,6 @@ namespace Session1.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //6 lets also have static files, this is added before routing middleware
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "MyStaticFiles")),
-                RequestPath = "/StaticFiles"
-            });
 
             app.UseRouting();
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Session1.Api.Model;
 using Session1.Api.Services;
@@ -15,45 +16,56 @@ namespace Session1.Api.Controllers
     [Route("[controller]")]
     public class AnimalController : ControllerBase
     {
-        private readonly AnimalsDbContext context;
-        private readonly IMyService serivce;
+        private readonly IAnimalService animalService;
+        private readonly ILogger<AnimalController> logger;
 
-        public AnimalController(AnimalsDbContext context, IMyService serivce)
+        public AnimalController(IAnimalService animalService, ILogger<AnimalController> logger)
         {
-            this.context = context;
-            this.serivce = serivce;
+            this.animalService = animalService;
+            this.logger = logger;
         }
 
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Animal>> Get(int id)
         {
-            var animal = context.Animal.FirstOrDefault(a => a.Id == id);
-            if (animal == null)
+            try
             {
-                return NotFound();
+                var animal = await animalService.Get(id);
+                if (animal == null)
+                {
+                    return NotFound();
+                }
+                return Ok(animal);
             }
-            return Ok(await Task.FromResult(animal));
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Animal>>> GetAll()
         {
-            var key = await serivce.GetMyKey();
+            try
+            {
+                var animals = await animalService.GetAll();
 
-            var animals = context.Animal.ToList();
-
-            return Ok(await Task.FromResult(animals));
+                return Ok(animals);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Animal animal)
+        public async Task<ActionResult<Animal>> Post(Animal animal)
         {
             try
             {
-                context.Animal.Add(animal);
-                await context.SaveChangesAsync();
-                return Ok();
+                var result = await animalService.Add(animal);
+                return Ok(result);
             }
             catch(Exception ex)
             {
