@@ -37,7 +37,7 @@ namespace Session1.Api
 
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IAnimalService, AnimalService>();
-            services.AddTransient<IMyDependantService, MyDependantService>();
+            services.AddTransient<IAnimalNamingService, AnimalNamingService>();
 
             var appSettings = config.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(appSettings);

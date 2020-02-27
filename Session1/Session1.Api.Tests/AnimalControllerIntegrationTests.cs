@@ -11,14 +11,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Session1.Api.Dal;
+using System;
+using Session1.Api.Services;
 
 namespace Session1.Api.Tests
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class AnimalControllerTests
+    public class AnimalControllerIntegrationTests
     {
         private static IHost host;
+        private static HttpClient client;
+
         [ClassInitialize]
         public static async Task TestFixtureSetup(TestContext context)
         {
@@ -27,30 +31,32 @@ namespace Session1.Api.Tests
                 {
                     webHost.UseTestServer();
                     webHost.UseStartup<Startup>()
+                    //although its an integration test, we dont always want to use a real db, we can replace injected context with our own, in memory one.
                     .ConfigureTestServices(services =>
                     {
-                        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AnimalsDbContext>));
+                        var descriptors = services.Where(d => d.ServiceType == typeof(DbContextOptions<AnimalsDbContext>) || d.ServiceType == typeof(AnimalsDbContext)).ToList();
 
-                        if (descriptor != null)
+                        foreach(var descriptor in descriptors)
                         {
                             services.Remove(descriptor);
                         }
 
-                        services.AddDbContext<AnimalsDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "InMemoryDb"), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-                        
-                    });
+                        services.AddDbContext<AnimalsDbContext>(opt => opt.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()), ServiceLifetime.Transient, ServiceLifetime.Transient);
+
+                    })
+                    ;
                 });
             hostBuilder.ConfigureAppConfiguration((context, conf) =>
             {
-                conf.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                conf.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             });
 
             host = await hostBuilder.StartAsync();
+            client = host.GetTestClient();
         }
         [TestMethod]
         public async Task TestGet()
         {
-            var client = host.GetTestClient();
             var response = await client.GetAsync("animal");
             var stringResponse = await response.Content.ReadAsStringAsync();
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -63,7 +69,6 @@ namespace Session1.Api.Tests
         [DataRow(-100)]
         public async Task TestGetOne(int id)
         {
-            var client = host.GetTestClient();
             var response = await client.GetAsync($"animal/{id}");
             var stringResponse = await response.Content.ReadAsStringAsync();
             Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
@@ -72,13 +77,12 @@ namespace Session1.Api.Tests
         [TestMethod]
         public async Task TestPost()
         {
-            Animal animal = new Animal() { Id = 1, Name = "Aadvark" };
+            Animal animal = new Animal() { Id = 1, Name = "Aadvark", IsReal = true };
 
             var requestString = JsonSerializer.Serialize(animal);
 
             var stringContent = new StringContent(requestString, System.Text.Encoding.UTF8, "application/json");
 
-            var client = host.GetTestClient();
             var response = await client.PostAsync("animal", stringContent);
 
             Assert.IsTrue(response.IsSuccessStatusCode);

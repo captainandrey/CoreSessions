@@ -14,16 +14,16 @@ namespace Session1.Api.Services
         private readonly AppSettings appSettings;
         private readonly ILogger<AnimalService> logger;
         private readonly AnimalsDbContext context;
-        private readonly IMyDependantService myDependantService;
+        private readonly IAnimalNamingService animalNamingService;
         private readonly IMapper mapper;
 
 
-        public AnimalService(IOptions<AppSettings> appSettings, ILogger<AnimalService> logger, AnimalsDbContext context, IMyDependantService myDependantService, IMapper mapper)
+        public AnimalService(IOptions<AppSettings> appSettings, ILogger<AnimalService> logger, AnimalsDbContext context, IAnimalNamingService animalNamingService, IMapper mapper)
         {
             this.appSettings = appSettings.Value;
             this.logger = logger;
             this.context = context;
-            this.myDependantService = myDependantService;
+            this.animalNamingService = animalNamingService;
             this.mapper = mapper;
         }
 
@@ -31,11 +31,19 @@ namespace Session1.Api.Services
         {
             try
             {
-                await myDependantService.SomeMethod();
+
                 var dtos = context.Animal.Where(a => !appSettings.OnlyShowRealAnimals || a.IsReal).ToList();
                 var model = mapper.Map<List<Model.Animal>>(dtos);
 
-                return model;
+                var tasks = new List<Task<Model.Animal>>();
+                foreach(var animal in model)
+                {
+                    tasks.Add(animalNamingService.GenerateName(animal));
+                }
+
+                var result = await Task.WhenAll(tasks);
+
+                return result.ToList();
 
             }
             catch(Exception ex)
@@ -49,11 +57,16 @@ namespace Session1.Api.Services
         {
             try
             {
-                await myDependantService.SomeMethod();
                 var dto = context.Animal.FirstOrDefault(a => a.Id == id && ( !appSettings.OnlyShowRealAnimals || a.IsReal));
+                if(dto == null)
+                {
+                    return null;
+                }
                 var model = mapper.Map<Model.Animal>(dto);
 
-                return model;
+                var result = await animalNamingService.GenerateName(model);
+
+                return result;
 
             }
             catch (Exception ex)
@@ -72,11 +85,18 @@ namespace Session1.Api.Services
 
             try
             {
-                await myDependantService.SomeMethod();
-                var dtos = context.Animal.Where(a => a.Name.Contains(name) && (!appSettings.OnlyShowRealAnimals || a.IsReal)).ToList();
+                var dtos = context.Animal.Where(a => a.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase) && (!appSettings.OnlyShowRealAnimals || a.IsReal)).ToList();
                 var model = mapper.Map<List<Model.Animal>>(dtos);
 
-                return model;
+                var tasks = new List<Task<Model.Animal>>();
+                foreach (var animal in model)
+                {
+                    tasks.Add(animalNamingService.GenerateName(animal));
+                }
+
+                var result = await Task.WhenAll(tasks);
+
+                return result.ToList();
 
             }
             catch (Exception ex)

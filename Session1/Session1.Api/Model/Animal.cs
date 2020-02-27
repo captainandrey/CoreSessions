@@ -9,7 +9,8 @@ namespace Session1.Api.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
         public bool IsReal { get; set; }
+
+        public string GivenName { get; set; }
     }
 }
