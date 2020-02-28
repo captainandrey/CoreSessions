@@ -43,17 +43,17 @@ namespace Session1.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
         {
+            //3this has to be on top of other middleware you want to catch exceptions from
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             //3 custom middleware example
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
 
 
-            //this short circuits the pipeline
-            //app.Run(async context =>
-            //{
-            //    await context.Response.WriteAsync("Hello, World!");
-            //});
-
-            //this allows the next middeware to run
+            //3this allows the next middeware to run
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.
@@ -64,26 +64,33 @@ namespace Session1.Api
                 await next();
                 // Do logging or other work that doesn't write to the Response.
 
+                //3 testing the exception handling middleware
+                //throw new Exception("Bad things happened");
+
                 logger.LogInformation("Our custom middleware is being used! - End");
             });
 
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.
-                logger.LogInformation("Our custom middleware2 is being used! - Start");
+                logger.LogInformation("Our custom middleware is being used! - Start2");
 
                // await next.Invoke();
                 await next();
                 // Do logging or other work that doesn't write to the Response.
 
-                logger.LogInformation("Our custom middleware2 is being used! - End");
+                logger.LogInformation("Our custom middleware is being used! - End2");
             });
 
-            
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+         
+
+            //this short circuits the pipeline
+            //app.Run(async context =>
+            //{
+            //    await context.Response.WriteAsync("Hi!");
+            //});
+
+
 
             //6 lets also have static files, this is added before routing middleware
             //if request is handled by static file middleware, it is short circuited
