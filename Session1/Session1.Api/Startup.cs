@@ -43,7 +43,7 @@ namespace Session1.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
         {
-            //3this has to be on top of other middleware you want to catch exceptions from
+            //3 this has to be on top of other middleware you want to catch exceptions from
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -82,7 +82,7 @@ namespace Session1.Api
                 logger.LogInformation("Our custom middleware is being used! - End2");
             });
 
-         
+
 
             //this short circuits the pipeline
             //app.Run(async context =>
