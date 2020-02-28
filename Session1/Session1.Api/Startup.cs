@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Session1.Api.Dal;
 using Session1.Api.Services;
@@ -56,8 +55,7 @@ namespace Session1.Api
 
             app.UseEndpoints(endpoints =>
             {
-                //5 lets use controllers
-                endpoints.MapControllers(); //6. Map attribute-routed API controllers
+                endpoints.MapControllers();
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");
