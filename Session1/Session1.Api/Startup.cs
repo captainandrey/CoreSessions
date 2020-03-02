@@ -41,7 +41,7 @@ namespace Session1.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*We can also inject logger here, but not in constructor*/ ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, /*There is also a version of the method with ILogger the runtime will call*/ ILogger<Startup> logger)
         {
             //3 this has to be on top of other middleware you want to catch exceptions from
             if (env.IsDevelopment())
@@ -53,7 +53,7 @@ namespace Session1.Api
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1
 
 
-            //3this allows the next middeware to run
+            //3 this allows the next middeware to run
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.
