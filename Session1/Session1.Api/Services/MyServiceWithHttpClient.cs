@@ -62,8 +62,6 @@ namespace Session1.Api.Services
             var model = await JsonSerializer.DeserializeAsync<TestResponse>(contentStream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             return model.SomeValue;
-
-
         }
 
         //2.7 used typed client
