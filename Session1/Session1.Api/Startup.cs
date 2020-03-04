@@ -71,7 +71,6 @@ namespace Session1.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            //6 lets also have static files, this is added before routing middleware
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "MyStaticFiles")),
@@ -82,8 +81,7 @@ namespace Session1.Api
 
             app.UseEndpoints(endpoints =>
             {
-                //5 lets use controllers
-                endpoints.MapControllers(); //6. Map attribute-routed API controllers
+                endpoints.MapControllers(); 
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");

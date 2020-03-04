@@ -15,10 +15,9 @@ namespace Session1.Api.Controllers
     {
         private AppSettings appSettings;
 
-        private IMyService serivce;
-        private IMyService serivce2;
+        private readonly IMyService serivce;
+        private readonly IMyService serivce2;
 
-        //we configured injection of IOptions
         public TestController(IOptions<AppSettings> config, IMyService serivce, IMyService serivce2)
         {
             this.appSettings = config.Value;
@@ -26,13 +25,13 @@ namespace Session1.Api.Controllers
             this.serivce2 = serivce2;
         }
 
-        //7. our first action
         [HttpGet]
         public ActionResult Get()
         {
             return Ok($"{serivce.GetMyKey()}\n{serivce2.GetMyKey()}");
         }
 
+        //2.3 Lets add a post action so we can have something more interesting to work with.
         [HttpPost]
         public async Task<ActionResult<TestResponse>> Post(TestRequest requestModel)
         {
