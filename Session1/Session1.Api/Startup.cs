@@ -29,6 +29,7 @@ namespace Session1.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddHttpClient();
             //2.5
             services.AddHttpClient("myclient",
                 //2.6 we can name the client and add default config to it
