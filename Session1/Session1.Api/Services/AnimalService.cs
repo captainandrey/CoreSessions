@@ -108,12 +108,20 @@ namespace Session1.Api.Services
 
         public async Task<Model.Animal> Add(Model.Animal animal)
         {
-            if (animal is null)
-            {
-                throw new ArgumentNullException(nameof(animal));
-            }
             try
             {
+                if (animal is null)
+                {
+                    throw new ArgumentNullException(nameof(animal));
+                }
+            
+                var existing = context.Animal.FirstOrDefault(a => a.Id == animal.Id);
+
+                if(existing != null)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(animal), "Value already exists in database");
+                }
+
                 var dto = mapper.Map<Dal.Dto.Animal>(animal);
 
                 context.Animal.Add(dto);
