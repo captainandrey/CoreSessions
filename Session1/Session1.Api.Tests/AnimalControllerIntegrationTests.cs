@@ -67,7 +67,7 @@ namespace Session1.Api.Tests
         [DataRow(100)]
         [DataRow(0)]
         [DataRow(-100)]
-        public async Task TestGetOne(int id)
+        public async Task TestGetOneNotFound(int id)
         {
             var response = await client.GetAsync($"animal/{id}");
             var stringResponse = await response.Content.ReadAsStringAsync();
