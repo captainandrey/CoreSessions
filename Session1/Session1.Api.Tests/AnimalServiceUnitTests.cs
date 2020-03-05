@@ -41,6 +41,8 @@ namespace Session1.Api.Tests
                 .Options;
 
             context = new AnimalsDbContext(contextOptions);
+            //populate the db with some test data
+            await PopulateTestData();
 
             //lets move this setup step here since its common to all test cases
             var allAnimals = await context.Animal.ToListAsync();
@@ -59,8 +61,7 @@ namespace Session1.Api.Tests
             });
             var mapper = mapperConfig.CreateMapper();
 
-            //populate the db with some test data
-            await PopulateTestData();
+           
 
             //now we can instanciate the service we are testing and inject all the dependencies we have, some are mocks, some are real implementations
             service = new AnimalService(options, loggerMock.Object, context, animalNamingServiceMock.Object, mapper);
