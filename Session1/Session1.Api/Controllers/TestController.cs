@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace Session1.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")] //6. routing attribute
-    public class TestController : ControllerBase //inherit base controller
+    [Route("[controller]")]
+    public class TestController : ControllerBase
     {
         private AppSettings appSettings;
 

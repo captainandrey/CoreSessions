@@ -44,6 +44,7 @@ namespace Session1.Api.Services
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             logger.LogInformation("MyHostedService Service is stopping.");
+            //await Task.Delay(1000);
             await base.StopAsync(cancellationToken);
         }
 
