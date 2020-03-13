@@ -21,12 +21,7 @@ namespace Session1.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    
-                    .ConfigureAppConfiguration((hostingContext, config) =>
-                    {
-                        config.AddJsonFile("myownjsonfile.json", optional: true, reloadOnChange: true);
-                    });
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
