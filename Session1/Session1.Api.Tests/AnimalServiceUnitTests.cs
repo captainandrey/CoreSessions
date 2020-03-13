@@ -8,8 +8,6 @@ using Session1.Api.Dal;
 using Session1.Api.Services;
 using Session1.Api.Services.Mappers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Session1.Api.Tests
@@ -69,7 +67,6 @@ namespace Session1.Api.Tests
 
         private async Task PopulateTestData()
         {
-           
             context.Animal.Add(new Dal.Dto.Animal { Id = 1, IsReal = true, Name = "Aardvark" });
             context.Animal.Add(new Dal.Dto.Animal { Id = 2, IsReal = false, Name = "Unicorn" });
             context.Animal.Add(new Dal.Dto.Animal { Id = 3, IsReal = true, Name = "Narwhal" });
@@ -108,9 +105,6 @@ namespace Session1.Api.Tests
             var result = await service.Search(search);
             Assert.AreEqual(1, result.Count);
             animalNamingServiceMock.Verify(s => s.GenerateName(It.IsAny<Model.Animal>()), Times.Once);
-
         }
-
-
     }
 }

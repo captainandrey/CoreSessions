@@ -15,7 +15,7 @@ namespace Session1.Api.Services
 
         public AnimalNamingService()
         {
-            names = new List<string> { "Bob", "Geff", "Sam" };
+            names = new List<string> { "Bob", "Geff", "Sam", "Rodrigo"};
         }
 
         public Task<Animal> GenerateName(Animal animal)
