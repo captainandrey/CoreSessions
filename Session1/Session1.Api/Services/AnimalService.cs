@@ -31,7 +31,6 @@ namespace Session1.Api.Services
         {
             try
             {
-
                 var dtos = context.Animal.Where(a => !appSettings.OnlyShowRealAnimals || a.IsReal).ToList();
                 var model = mapper.Map<List<Model.Animal>>(dtos);
 
