@@ -41,7 +41,7 @@ namespace Session1.Api.Tests
                             services.Remove(descriptor);
                         }
 
-                        services.AddDbContext<AnimalsDbContext>(opt => opt.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()), ServiceLifetime.Transient, ServiceLifetime.Transient);
+                        services.AddDbContext<AnimalsDbContext>(opt => opt.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
 
                     })
                     ;

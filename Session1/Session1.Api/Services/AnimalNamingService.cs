@@ -7,7 +7,6 @@ namespace Session1.Api.Services
 {
     public class AnimalNamingService : IAnimalNamingService
     {
-
         private readonly List<string> names;
 
         public AnimalNamingService()
@@ -23,5 +22,6 @@ namespace Session1.Api.Services
 
             return Task.FromResult(animal);
         }
+        
     }
 }
